@@ -1,0 +1,10 @@
+FROM node:7.7.2-slim
+EXPOSE 4000
+WORKDIR app
+COPY . .
+RUN ["npm", "install"]
+ARG GIT_SHA
+ENV GIT_SHA=$GIT_SHA
+ARG ATLAS_CONFIG
+LABEL Atlas="$ATLAS_CONFIG"
+CMD ["npm", "start"]
