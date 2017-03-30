@@ -1,7 +1,7 @@
 {
   "service-name": "web",
   "project-name": "lunch-roulette",
-  "install": "[ -e cljs.jar ] || curl -O -L https://github.com/clojure/clojurescript/releases/download/r1.9.473/cljs.jar",
+  "install": "bin/install",
   "build": "java -cp cljs.jar:src clojure.main release.clj",
   "start": ". ~/.nvm/nvm.sh && nvm exec 7.7.2 npm start",
   "test": ". ~/.nvm/nvm.sh && nvm exec 7.7.2 npm test"
