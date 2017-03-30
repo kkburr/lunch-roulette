@@ -1,5 +1,9 @@
-(ns lunch-roulette.core)
+(ns lunch-roulette.core
+  (:require [cljs.nodejs :as nodejs]))
 
-(enable-console-print!)
+(nodejs/enable-util-print!)
 
-(println "Hello Kaitlin!")
+(defn -main [& args]
+  (println "Hello Kaitlin!"))
+
+(set! *main-cli-fn* -main)
