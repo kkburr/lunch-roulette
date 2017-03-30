@@ -1,16 +1,10 @@
 language: elixir
 sudo:     required
-addons:
-  postgresql: "9.6"
-after_success:
-  - if [ "${TRAVIS_BRANCH}" == "master" ]; then atlas deploy $SERVICE; fi
 before_install:
+  - ATLAS_PREFIX=$(pwd)
+  - PATH=$PATH:$ATLAS_PREFIX
   - curl -u '6aeac72bf78c789d48eafaa1e40972824baad6f4:' 'https://raw.githubusercontent.com/RallySoftware/atlas/master/install' | bash
-  - nvm install 7
-  - cd bin && npm install && cd ..
-  - pip install --upgrade pip
 before_script:
-  - nvm install 7
   - atlas build $SERVICE
 cache:
   directories:
@@ -22,13 +16,11 @@ env:
 git:
   depth: 999
 install:
-  - nvm install 7
   - atlas install $SERVICE
 otp_release:
   - 19.2
 script:
-  - nvm install 7
   - atlas test $SERVICE
+  - if [ "${TRAVIS_BRANCH}" == "master" ]; then atlas deploy $SERVICE; fi
 services:
   - docker
-  - postgresql
