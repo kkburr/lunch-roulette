@@ -46,7 +46,7 @@
   [:input {:type "text"
            :value @value
            :on-change #(reset! value (-> % .-target .-value))
-           :on-key-down #(if (= "Enter" (.-key %)) (reset! roulette-participants (conj @roulette-participants @value)))}])
+           :on-key-down #(if (and (= "Enter" (.-key %)) (not (empty? (-> % .-target .-value)))) (reset! roulette-participants (conj @roulette-participants @value)))}])
 
 (defn roulette-string
   [my-value]
@@ -70,7 +70,7 @@
         [:h2 "Participants:"]
         [:p (build-participant-input val)
           [:a {:href "#"
-               :onClick #(reset! roulette-participants (conj @roulette-participants @val))}
+               :onClick #(if-not (empty? @val) (reset! roulette-participants (conj @roulette-participants @val)))}
                "Add participant"]]]
      (build-participants-prints)]))
 
