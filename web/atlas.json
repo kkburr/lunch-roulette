@@ -1,8 +1,6 @@
 {
   "service-name": "web",
   "project-name": "lunch-roulette",
-  "install": "bin/install",
-  "build": "java -cp cljs.jar:src clojure.main node.clj",
-  "start": ". ~/.nvm/nvm.sh && nvm exec 7.7.2 npm start",
+  "start": "lein figwheel",
   "test": ". ~/.nvm/nvm.sh && nvm exec 7.7.2 npm test"
 }
