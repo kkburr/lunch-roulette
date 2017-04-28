@@ -29,11 +29,19 @@
           (recur rest-of-participants new-roulette-teams next-team-number))
         new-roulette-teams)))
 
-(defn form-groups []
-  (reset! roulette-teams {})
-  (let [teams-count (calc-number-of-teams (count @roulette-participants))]
-    (and (reset! number-of-teams teams-count)
-         (reset! roulette-teams (set-teams @roulette-participants {} 0)))))
+(defn form-groups
+  ([]
+    (reset! roulette-teams {})
+    (let [teams-count (calc-number-of-teams (count @roulette-participants))]
+      (and (reset! number-of-teams teams-count)
+           (reset! roulette-teams (set-teams @roulette-participants {} 0)))))
+  ([number-per-team]
+    (if (integer? number-per-team)
+      (let [teams-count (/ (count @roulette-participants) number-per-team)]
+        (and (reset! number-of-teams teams-count)
+             (reset! roulette-teams {})
+             (reset! roulette-teams (set-teams @roulette-participants {} 0))))
+      (form-groups))))
 
 (defn build-participants-prints []
   (let [players-string (if (empty? @roulette-participants)
@@ -74,12 +82,23 @@
                "Add participant"]]]
      (build-participants-prints)]))
 
+ (defn build-roulette-input
+   [numb-val]
+   (println @numb-val)
+   [:input {:type "text"
+            :label "Number per Teams"
+            :value @numb-val
+            :on-change #(reset! numb-val (-> % .-target .-value))}])
+            ; :on-key-down #(if (and (= "Enter" (.-key %)) (not (empty? (-> % .-target .-value)))) (reset! roulette-participants (conj @roulette-participants @value)))}])
+
 (defn build-roulette-div []
-  [:div
-    [:img {:src "./images/walken-roulette.jpeg"}]
-    [:h2 "Roulette Teams:"]
-    [:div [:a {:href "#" :onClick #(form-groups)} "Spin the cylinder"]]
-    [:div (roulette-string @roulette-teams)]])
+  (let [numb-val (r/atom "")]
+    [:div
+      [:img {:src "./images/walken-roulette.jpeg"}]
+      [:h2 "Roulette Teams:"]
+      [:div [:p (build-roulette-input numb-val) "  Number per Team"]
+            [:a {:href "#" :onClick #(form-groups @numb-val)} "Spin the cylinder"]]
+      [:div (roulette-string @roulette-teams)]]))
 
 (defn build-divs [] (sab/html [:div (build-participants-div) (build-roulette-div)]))
 
